@@ -54,10 +54,13 @@ class PrintExtraService : IntegrationService() {
                 }
 
                 val receipt = requireNotNull(ReceiptApi.getReceipt(context, receiptType))
+                val baseReceiptUuid = receipt.header.baseReceiptUuid
+
                 message.appendLine("${date}    чек №${receipt.header.number}")
                 message.appendLine("${date}    ${receipt.getPositions().joinToString { it.name }}")
 
-                val printable = arrayOf<IPrintable>(PrintableText("^._.^"))
+                val printable = arrayOf<IPrintable>(PrintableText("Base receipt uuid"), PrintableText(baseReceiptUuid ?: "---"))
+
                 val printExtra = SetPrintExtra(PrintExtraPlacePrintGroupTop(null), printable)
                 appendLog(message)
 
